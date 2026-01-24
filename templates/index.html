@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center py-5">
+    <h1 class="display-3 fw-bold mb-3">Privacy is not an option.<br>It's a right.</h1>
+    <p class="lead text-muted mb-4">Experience true secure messaging powered by mathematical precision.</p>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="/login" class="btn btn-dark btn-lg px-5">Login</a>
+        <a href="/register" class="btn btn-outline-primary btn-lg px-5">Create Account</a>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<div class="row g-5">
+    <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+            <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Code">
+            <div class="card-body">
+                <h3 class="card-title"><i class="fas fa-code text-primary me-2"></i>Powered by Python</h3>
+                <p class="card-text">Built on a robust Flask backend, utilizing socket communication for instant message delivery without latency.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+            <img src="https://images.unsplash.com/photo-1510511459019-5dda7724fd87?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Security">
+            <div class="card-body">
+                <h3 class="card-title"><i class="fas fa-lock text-success me-2"></i>RSA Encryption</h3>
+                <p class="card-text">We don't use standard libraries blindly. We implement the RSA algorithm mathematically to generate unique public/private key pairs for every user.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-lg-12">
+        <h2 class="mb-4">How it Works</h2>
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        <strong>Step 1: Key Generation</strong>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        When you register, the system calculates two large prime numbers to generate your unique <strong>Public Key</strong> (shared with friends) and <strong>Private Key</strong> (kept secret on your device).
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        <strong>Step 2: Secure Handshake</strong>
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Before chatting, the system performs a cryptographic handshake to ensure the identity of both parties.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

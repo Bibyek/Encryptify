@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .chat-container { height: 70vh; display: flex; overflow: hidden; }
+    .contacts-sidebar { background: rgba(255, 255, 255, 0.9); border-right: 1px solid #ddd; overflow-y: auto; }
+    .chat-window { background: #fff; display: flex; flex-direction: column; }
+    .messages-area { flex: 1; padding: 20px; overflow-y: auto; background-color: #f0f2f5; }
+    .message-bubble { max-width: 70%; padding: 10px 15px; margin-bottom: 10px; border-radius: 15px; position: relative; }
+    .message-sent { background-color: #667eea; color: white; align-self: flex-end; margin-left: auto; border-bottom-right-radius: 2px; }
+    .message-received { background-color: #e4e6eb; color: black; align-self: flex-start; margin-right: auto; border-bottom-left-radius: 2px; }
+    .active-contact { background-color: #e9ecef; border-left: 4px solid #667eea; }
+</style>
+
+<div class="card shadow-lg border-0">
+    <div class="card-body p-0 chat-container">
+        
+        <div class="col-md-4 contacts-sidebar p-3">
+            <h5 class="mb-4">Contacts</h5>
+            <div class="list-group">
+                {% for user in users %}
+                <a href="#" class="list-group-item list-group-item-action contact-item" 
+                   onclick="selectUser({{ user.id }}, '{{ user.username }}', this)">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-dark text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            {{ user.username[0] | upper }}
+                        </div>
+                        <div>
+                            <h6 class="mb-0">{{ user.username }}</h6>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-md-8 chat-window">
+            <div class="p-3 border-bottom bg-light">
+                <h6 class="mb-0" id="chat-header">Select a contact to start chatting</h6>
+            </div>
+
+            <div class="messages-area d-flex flex-column" id="chat-box">
+                </div>
+
+            <div class="p-3 border-top bg-white">
+                <div class="input-group">
+                    <input type="text" id="message-input" class="form-control" placeholder="Type a message..." disabled>
+                    <button id="send-btn" class="btn btn-primary" disabled><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+    const socket = io();
+    const myId = {{ user_id }}; 
+    let currentReceiverId = null;
+
+    // 1. SELECT USER FUNCTION
+    function selectUser(userId, username, element) {
+        currentReceiverId = userId;
+
+        // Update UI Header
+        document.getElementById('chat-header').innerText = "Chatting with " + username;
+        
+        // Enable Input
+        document.getElementById('message-input').disabled = false;
+        document.getElementById('send-btn').disabled = false;
+
+        // Highlight active contact
+        document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('active-contact'));
+        element.classList.add('active-contact');
+
+        // Clear chat box and Load History
+        document.getElementById('chat-box').innerHTML = '';
+        fetchMessages(userId);
+    }
+
+    // 2. FETCH HISTORY FROM API
+    async function fetchMessages(partnerId) {
+        const response = await fetch(`/get_messages/${partnerId}`);
+        const messages = await response.json();
+        messages.forEach(msg => appendMessage(msg));
+    }
+
+    // 3. SEND MESSAGE
+    document.getElementById('send-btn').addEventListener('click', () => {
+        const input = document.getElementById('message-input');
+        const msg = input.value;
+        if (msg.trim() !== "" && currentReceiverId) {
+            socket.emit('private_message', {
+                'receiver_id': currentReceiverId,
+                'message': msg
+            });
+            input.value = "";
+        }
+    });
+
+    // 4. RECEIVE MESSAGE
+    socket.on('new_private_message', function(data) {
+        // Only show message if it belongs to the current conversation
+        if (
+            (data.sender_id === myId && data.receiver_id === currentReceiverId) || 
+            (data.sender_id === currentReceiverId && data.receiver_id === myId)
+        ) {
+            appendMessage(data);
+        }
+    });
+
+    // Helper: Add bubble to screen
+    function appendMessage(data) {
+        const chatBox = document.getElementById('chat-box');
+        const div = document.createElement('div');
+        div.classList.add('message-bubble');
+        
+        if (data.sender_id === myId) {
+            div.classList.add('message-sent');
+            div.innerHTML = `${data.content}`;
+        } else {
+            div.classList.add('message-received');
+            div.innerHTML = `${data.content}`;
+        }
+        
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+{% endblock %}

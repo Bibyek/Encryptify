@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* CUSTOM TOOL STYLING (Inspired by your reference) */
+    .tool-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .tool-container {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .tool-sidebar {
+        background: #f8f9fa;
+        border-left: 1px solid #eee;
+        padding: 20px;
+    }
+
+    .io-box {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+        width: 100%;
+        font-family: 'Courier New', monospace; /* Monospace for code/crypto feel */
+        font-size: 0.95rem;
+        resize: vertical;
+        min-height: 150px;
+    }
+
+    .io-box:focus {
+        border-color: #764ba2;
+        box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
+        outline: none;
+    }
+
+    .action-bar {
+        background: #f1f3f5;
+        padding: 15px 25px;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .result-area {
+        background: #f8f9fa;
+        min-height: 150px;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: rgba(255,255,255,0.2);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.5);
+    }
+    .nav-pills .nav-link {
+        color: rgba(255,255,255,0.8);
+    }
+</style>
+
+<div class="row mt-4">
+    <div class="col-lg-9">
+        <div class="tool-container">
+            
+            <div class="tool-header">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-shield-alt fa-2x me-3"></i>
+                    <div>
+                        <h4 class="m-0 fw-bold">CRYPTO SUITE</h4>
+                        <small>AES-128 Encryption Engine</small>
+                    </div>
+                </div>
+                
+                <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="text-tab-btn" data-bs-toggle="pill" data-bs-target="#text-tab" type="button"><i class="fas fa-font me-2"></i>Text</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="file-tab-btn" data-bs-toggle="pill" data-bs-target="#file-tab" type="button"><i class="fas fa-file me-2"></i>File</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                
+                <div class="tab-pane fade show active" id="text-tab">
+                    <form action="/tools/text" method="POST">
+                        
+                        <div class="p-4">
+                            <label class="fw-bold text-muted mb-2 text-uppercase">Input Data</label>
+                            <textarea class="io-box" name="text_input" placeholder="Type or paste plain text here to encrypt...">{{ text_result }}</textarea>
+                        </div>
+
+                        <div class="action-bar">
+                            <div class="d-flex align-items-center flex-grow-1">
+                                <i class="fas fa-key text-muted me-2"></i>
+                                <input type="text" class="form-control" name="key" required placeholder="Enter Secret Key (Password)" style="max-width: 300px;">
+                            </div>
+                            
+                            <button type="submit" name="action" value="encrypt" class="btn btn-dark px-4 fw-bold">
+                                <i class="fas fa-lock me-2"></i>ENCRYPT
+                            </button>
+                            <button type="submit" name="action" value="decrypt" class="btn btn-outline-dark px-4 fw-bold">
+                                <i class="fas fa-unlock me-2"></i>DECRYPT
+                            </button>
+                        </div>
+
+                        <div class="p-4 result-area">
+                            <label class="fw-bold text-muted mb-2 text-uppercase">Result Output</label>
+                            <textarea class="io-box" readonly placeholder="Result will appear here...">{{ text_output }}</textarea>
+                            
+                            {% if text_output %}
+                            <div class="mt-2 text-end">
+                                <button type="button" class="btn btn-sm btn-light border" onclick="navigator.clipboard.writeText(`{{ text_output }}`)">
+                                    <i class="fas fa-copy"></i> Copy to Clipboard
+                                </button>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="file-tab">
+                    <form action="/tools/file" method="POST" enctype="multipart/form-data">
+                        <div class="p-5 text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-file-invoice fa-4x text-primary mb-3"></i>
+                                <h3>File Locker</h3>
+                                <p class="text-muted">Upload any document, image, or PDF to secure it.</p>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <input type="file" class="form-control form-control-lg mb-3" name="file" required>
+                                    
+                                    <div class="input-group mb-4">
+                                        <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                        <input type="text" class="form-control" name="key" required placeholder="Create a password for this file">
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                        <button type="submit" name="action" value="encrypt" class="btn btn-danger btn-lg px-5">
+                                            LOCK FILE (Encrypt)
+                                        </button>
+                                        <button type="submit" name="action" value="decrypt" class="btn btn-success btn-lg px-5">
+                                            UNLOCK FILE (Decrypt)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="tool-container tool-sidebar h-100">
+            <h6 class="fw-bold text-muted text-uppercase mb-3">Quick Navigation</h6>
+            
+            <div class="list-group list-group-flush bg-transparent">
+                <a href="/dashboard" class="list-group-item list-group-item-action bg-transparent border-0 px-0">
+                    <i class="fas fa-comments text-primary me-2"></i> Live Chat
+                </a>
+                <a href="/evidence" class="list-group-item list-group-item-action bg-transparent border-0 px-0">
+                    <i class="fas fa-database text-danger me-2"></i> Spy View (Evidence)
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-transparent border-0 px-0">
+                    <i class="fas fa-book text-success me-2"></i> Documentation
+                </a>
+            </div>
+
+            <hr>
+
+            <h6 class="fw-bold text-muted text-uppercase mb-3">Algorithm Info</h6>
+            <div class="card bg-white border-0 shadow-sm p-3 mb-3">
+                <small class="text-muted fw-bold">AES-128</small>
+                <p class="small mb-0 mt-1">Symmetric encryption used for the tools section. Fast and secure for large files.</p>
+            </div>
+            <div class="card bg-white border-0 shadow-sm p-3">
+                <small class="text-muted fw-bold">RSA-2048</small>
+                <p class="small mb-0 mt-1">Asymmetric encryption used for the chat section. Secure for key exchange.</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
