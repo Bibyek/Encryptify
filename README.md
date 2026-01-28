@@ -52,13 +52,14 @@ $$d \equiv e^{-1} \pmod{\phi(n)}$$
 
 ## 📸 Screenshots
 
-| Dashboard (Chat) | Evidence Page (Spy View) |
-|:---:|:---:|
-| *(Add your screenshot here)* | *(Add your screenshot here)* |
+<img width="1268" height="601" alt="Screenshot 2026-01-27 222951" src="https://github.com/user-attachments/assets/3cd4dc7f-a92e-46a4-aee6-e1f13e186537" />
+<img width="1265" height="592" alt="Screenshot 2026-01-27 223027" src="https://github.com/user-attachments/assets/306c9752-c055-43e5-b353-58f5167f4e44" />
+<img width="1265" height="596" alt="Screenshot 2026-01-27 223049" src="https://github.com/user-attachments/assets/4a76ecdd-371e-46ee-a009-cb2c4b1dc0ee" />
+<img width="1265" height="593" alt="Screenshot 2026-01-27 223108" src="https://github.com/user-attachments/assets/512992f3-90bc-420e-96d7-b38a229ae1f0" />
+<img width="1264" height="598" alt="Screenshot 2026-01-27 223128" src="https://github.com/user-attachments/assets/3327b63b-e733-4155-b269-584f55a1966b" />
+<img width="1262" height="578" alt="Screenshot 2026-01-27 223228" src="https://github.com/user-attachments/assets/19a147cc-d89e-47f0-ac63-1aa091058872" />
+<img width="1268" height="590" alt="Screenshot 2026-01-27 223248" src="https://github.com/user-attachments/assets/fdf699d1-5b19-4dd8-b15c-d6d4b4e69a2d" />
 
-| Crypto Tools | Login Page |
-|:---:|:---:|
-| *(Add your screenshot here)* | *(Add your screenshot here)* |
 
 ---
 
