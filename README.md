@@ -7,7 +7,7 @@
 
 > **"Privacy is not an option, it's a right."**
 
-**Encryptify** is a final-year major project (BCA 6th Sem) that demonstrates a robust, mathematically secure communication system. Unlike standard chat applications, Encryptify implements the **RSA Algorithm from scratch** to ensure true End-to-End Encryption (E2EE), proving that even the database administrator cannot read user messages.
+**Encryptify** is a BCA 6th Semester project-II that demonstrates a robust, mathematically secure communication system. Unlike standard chat applications, Encryptify implements the **RSA Algorithm from scratch** to ensure true End-to-End Encryption (E2EE), proving that even the database administrator cannot read user messages.
 
 ---
 
